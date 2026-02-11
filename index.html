@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>San Valentín</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Quicksand:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Quicksand', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(
+        180deg,
+        #fce4ec 0%,
+        #f8bbd0 30%,
+        #f48fb1 60%,
+        #f06292 100%
+      );
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      position: relative;
+    }
+
+    .ground {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 12vh;
+      background: linear-gradient(180deg, #5d4037 0%, #3e2723 100%);
+      border-radius: 50% 50% 0 0 / 30% 30% 0 0;
+      z-index: 2;
+    }
+
+    .grass {
+      position: absolute;
+      bottom: 10vh;
+      left: 0;
+      width: 100%;
+      height: 5vh;
+      background: linear-gradient(180deg, #66bb6a, #43a047);
+      border-radius: 50% 50% 0 0 / 60% 60% 0 0;
+      z-index: 3;
+    }
+
+    .grass-flowers {
+      position: absolute;
+      bottom: 10vh;
+      left: 0;
+      width: 100%;
+      height: 6vh;
+      z-index: 3;
+      pointer-events: none;
+      overflow: visible;
+    }
+
+    .grass-flower {
+      position: absolute;
+      bottom: 0;
+      opacity: 0;
+      animation: grassFlowerPop 0.8s ease-out forwards;
+    }
+
+    @keyframes grassFlowerPop {
+      0%   { opacity: 0; transform: scale(0) translateY(4px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .flowers-container {
+      position: absolute;
+      bottom: 12vh;
+      left: 0;
+      width: 100%;
+      height: 50vh;
+      z-index: 4;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 6vw;
+      pointer-events: none;
+    }
+
+    .flower-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .stem {
+      width: 4px;
+      height: 0;
+      background: linear-gradient(180deg, #7cb342, #558b2f);
+      border-radius: 2px;
+      transform-origin: bottom center;
+      animation: growStem 2.5s ease-out forwards;
+      position: relative;
+    }
+
+    .flower-wrapper:nth-child(1) .stem { animation-delay: 0s; }
+    .flower-wrapper:nth-child(2) .stem { animation-delay: 0.4s; }
+    .flower-wrapper:nth-child(3) .stem { animation-delay: 0.2s; }
+    .flower-wrapper:nth-child(4) .stem { animation-delay: 0.6s; }
+    .flower-wrapper:nth-child(5) .stem { animation-delay: 0.3s; }
+
+    @keyframes growStem {
+      0%   { height: 0; }
+      100% { height: 28vh; }
+    }
+
+    .leaf {
+      position: absolute;
+      bottom: 30%;
+      width: 28px;
+      height: 8px;
+      background: linear-gradient(90deg, #7cb342, #9ccc65);
+      border-radius: 2px 50% 50% 2px;
+      transform-origin: left center;
+      opacity: 0;
+      animation: leafGrow 1s ease-out forwards;
+    }
+
+    .leaf.left {
+      left: -26px;
+      background: linear-gradient(270deg, #7cb342, #9ccc65);
+      border-radius: 50% 2px 2px 50%;
+      transform-origin: right center;
+      animation-delay: inherit;
+    }
+
+    .leaf.right {
+      right: -26px;
+      animation-delay: inherit;
+    }
+
+    .leaf-lower {
+      position: absolute;
+      bottom: 15%;
+      width: 22px;
+      height: 7px;
+      background: linear-gradient(90deg, #689f38, #8bc34a);
+      border-radius: 2px 50% 50% 2px;
+      transform-origin: left center;
+      opacity: 0;
+      animation: leafGrow 1s ease-out forwards;
+    }
+
+    .leaf-lower.left {
+      left: -20px;
+      background: linear-gradient(270deg, #689f38, #8bc34a);
+      border-radius: 50% 2px 2px 50%;
+      transform-origin: right center;
+    }
+
+    .leaf-lower.right {
+      right: -20px;
+    }
+
+    .flower-wrapper:nth-child(1) .leaf,
+    .flower-wrapper:nth-child(1) .leaf-lower { animation-delay: 1.5s; }
+    .flower-wrapper:nth-child(2) .leaf,
+    .flower-wrapper:nth-child(2) .leaf-lower { animation-delay: 1.9s; }
+    .flower-wrapper:nth-child(3) .leaf,
+    .flower-wrapper:nth-child(3) .leaf-lower { animation-delay: 1.7s; }
+    .flower-wrapper:nth-child(4) .leaf,
+    .flower-wrapper:nth-child(4) .leaf-lower { animation-delay: 2.1s; }
+    .flower-wrapper:nth-child(5) .leaf,
+    .flower-wrapper:nth-child(5) .leaf-lower { animation-delay: 1.8s; }
+
+    @keyframes leafGrow {
+      0%   { opacity: 0; transform: scale(0); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .bloom {
+      position: absolute;
+      top: 0;
+      transform: translateY(-78%) scale(0);
+      opacity: 0;
+      animation: bloomOpen 2s ease-out forwards;
+      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.12));
+    }
+
+    .flower-wrapper:nth-child(1) .bloom { animation-delay: 2.0s; }
+    .flower-wrapper:nth-child(2) .bloom { animation-delay: 2.4s; }
+    .flower-wrapper:nth-child(3) .bloom { animation-delay: 2.2s; }
+    .flower-wrapper:nth-child(4) .bloom { animation-delay: 2.6s; }
+    .flower-wrapper:nth-child(5) .bloom { animation-delay: 2.3s; }
+
+    @keyframes bloomOpen {
+      0%   { transform: translateY(-78%) scale(0) rotate(-10deg); opacity: 0; }
+      50%  { opacity: 1; }
+      100% { transform: translateY(-78%) scale(1) rotate(0deg); opacity: 1; }
+    }
+
+    .flower-wrapper {
+      animation: sway 3s ease-in-out infinite alternate;
+    }
+
+    .flower-wrapper:nth-child(even) {
+      animation-direction: alternate-reverse;
+    }
+
+    @keyframes sway {
+      0%   { transform: rotate(-2deg); }
+      100% { transform: rotate(2deg); }
+    }
+
+    .petal {
+      position: fixed;
+      top: -40px;
+      width: 14px;
+      height: 18px;
+      border-radius: 50% 0 50% 50%;
+      opacity: 0.85;
+      z-index: 10;
+      pointer-events: none;
+      animation: petalFall linear forwards;
+    }
+
+    @keyframes petalFall {
+      0% {
+        transform: translateX(0) rotate(0deg) scale(1);
+        opacity: 0.9;
+      }
+      25% {
+        transform: translateX(30px) rotate(90deg) scale(0.95);
+      }
+      50% {
+        transform: translateX(-20px) rotate(180deg) scale(0.9);
+      }
+      75% {
+        transform: translateX(15px) rotate(270deg) scale(0.85);
+      }
+      100% {
+        transform: translateX(-10px) rotate(360deg) scale(0.8);
+        opacity: 0;
+        top: 105vh;
+      }
+    }
+
+    .question-section {
+      position: absolute;
+      top: 14vh;
+      left: 0;
+      width: 100%;
+      z-index: 20;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(30px);
+      pointer-events: none;
+      transition: opacity 1.5s ease, transform 1.5s ease;
+    }
+
+    .question-section.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .question-section h1 {
+      font-family: 'Dancing Script', cursive;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      color: #fff;
+      text-shadow:
+        0 2px 12px rgba(136, 14, 79, 0.45),
+        0 0 40px rgba(233, 30, 99, 0.15);
+      margin-bottom: 2rem;
+      line-height: 1.3;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 1.8rem;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      font-family: 'Quicksand', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      padding: 0.85rem 2.8rem;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      letter-spacing: 0.03em;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    }
+
+    .btn-yes {
+      background: linear-gradient(135deg, #f06292 0%, #e91e63 50%, #c2185b 100%);
+      color: #fff;
+      box-shadow:
+        0 4px 18px rgba(233, 30, 99, 0.35),
+        0 0 0 0 rgba(233, 30, 99, 0);
+    }
+
+    .btn-yes:hover {
+      transform: scale(1.08);
+      box-shadow:
+        0 6px 28px rgba(233, 30, 99, 0.5),
+        0 0 20px rgba(233, 30, 99, 0.2);
+    }
+
+    .btn-yes:active {
+      transform: scale(1.03);
+    }
+
+    .btn-no {
+      background: linear-gradient(135deg, #b0bec5 0%, #90a4ae 50%, #78909c 100%);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+      position: relative;
+      transition: left 0.3s ease, top 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .btn-no:hover {
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+    }
+
+    .btn-no.escaping {
+      position: fixed;
+      z-index: 100;
+    }
+
+    .romantic-message {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(ellipse at center, #fce4ec 0%, #f8bbd0 50%, #f48fb1 100%);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 1.2s ease;
+    }
+
+    .romantic-message.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .romantic-message h2 {
+      font-family: 'Dancing Script', cursive;
+      font-size: clamp(2rem, 6vw, 4rem);
+      color: #c2185b;
+      text-shadow: 0 2px 8px rgba(194, 24, 91, 0.3);
+      animation: pulseText 2s ease-in-out infinite;
+    }
+
+    .romantic-message .response-gif {
+      max-width: min(70vw, 280px);
+      height: auto;
+      margin-top: 1.5rem;
+      border-radius: 16px;
+      opacity: 0;
+      transform: scale(0.85);
+    }
+
+    .romantic-message.visible .response-gif {
+      animation: gifPopIn 0.8s 0.4s ease-out forwards;
+    }
+
+    @keyframes gifPopIn {
+      0%   { opacity: 0; transform: scale(0.85); }
+      60%  { opacity: 1; transform: scale(1.04); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes pulseText {
+      0%, 100% { opacity: 1; }
+      50%      { opacity: 0.8; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="grass"></div>
+  <div class="ground"></div>
+
+  <div class="grass-flowers" id="grass-flowers"></div>
+
+  <div class="flowers-container" id="flowers-container"></div>
+
+  <section class="question-section" id="question-section">
+    <h1>¿Puedo ser tu San Valentín?</h1>
+    <div class="buttons">
+      <button class="btn btn-yes" id="btn-yes">Sí</button>
+      <button class="btn btn-no" id="btn-no">No</button>
+    </div>
+  </section>
+
+  <div class="romantic-message" id="romantic-message">
+    <h2>Sabía que dirías que sí ❤️</h2>
+    <img
+      class="response-gif"
+      src="Myaowl Sticker by ACHTUNG - Find & Share on GIPHY.gif"
+      alt="Romantic sticker"
+    >
+  </div>
+
+  <script>
+    const flowerColours = [
+      {
+        outerStart: '#f48fb1', outerEnd: '#ec407a',
+        innerStart: '#fce4ec', innerEnd: '#f8bbd0',
+        streak: '#ad1457', pistil: '#fdd835',
+      },
+      {
+        outerStart: '#ef9a9a', outerEnd: '#e57373',
+        innerStart: '#ffebee', innerEnd: '#ffcdd2',
+        streak: '#c62828', pistil: '#fff176',
+      },
+      {
+        outerStart: '#ce93d8', outerEnd: '#ab47bc',
+        innerStart: '#f3e5f5', innerEnd: '#e1bee7',
+        streak: '#6a1b9a', pistil: '#ffe082',
+      },
+      {
+        outerStart: '#f06292', outerEnd: '#e91e63',
+        innerStart: '#fce4ec', innerEnd: '#f48fb1',
+        streak: '#880e4f', pistil: '#fff59d',
+      },
+      {
+        outerStart: '#ff8a80', outerEnd: '#ff5252',
+        innerStart: '#ffebee', innerEnd: '#ffcdd2',
+        streak: '#b71c1c', pistil: '#ffcc80',
+      },
+    ];
+
+    const NS = 'http://www.w3.org/2000/svg';
+
+    let gradientIdCounter = 0;
+
+    function createFlowerSVG(colours, size) {
+      const s = size || 70;
+      const svg = document.createElementNS(NS, 'svg');
+      svg.setAttribute('width', s);
+      svg.setAttribute('height', s);
+      svg.setAttribute('viewBox', '0 0 120 120');
+
+      const defs = document.createElementNS(NS, 'defs');
+      svg.appendChild(defs);
+
+      function makeRadialGrad(id, innerColor, outerColor) {
+        const g = document.createElementNS(NS, 'radialGradient');
+        g.setAttribute('id', id);
+        g.setAttribute('cx', '50%');
+        g.setAttribute('cy', '80%');
+        g.setAttribute('r', '70%');
+        g.setAttribute('fx', '50%');
+        g.setAttribute('fy', '90%');
+        const s1 = document.createElementNS(NS, 'stop');
+        s1.setAttribute('offset', '0%');
+        s1.setAttribute('stop-color', innerColor);
+        const s2 = document.createElementNS(NS, 'stop');
+        s2.setAttribute('offset', '100%');
+        s2.setAttribute('stop-color', outerColor);
+        g.appendChild(s1);
+        g.appendChild(s2);
+        defs.appendChild(g);
+        return id;
+      }
+
+      const outerGradId = 'og' + (gradientIdCounter++);
+      const innerGradId = 'ig' + (gradientIdCounter++);
+      makeRadialGrad(outerGradId, colours.outerStart, colours.outerEnd);
+      makeRadialGrad(innerGradId, colours.innerStart, colours.innerEnd);
+
+      const cx = 60, cy = 60;
+
+      function petalPath(length, width) {
+        const bw = width * 0.9;
+        const bh = length * 0.55;
+        return `
+          M 0,0
+          C ${bw * 0.3},${-length * 0.1}  ${bw},${-bh + 4}  ${width * 0.35},${-length + 6}
+          Q 0,${-length - 4}  ${-width * 0.35},${-length + 6}
+          C ${-bw},${-bh + 4}  ${-bw * 0.3},${-length * 0.1}  0,0
+          Z`;
+      }
+
+      function streakPaths(length) {
+        const lines = [];
+        lines.push(`M 0,${-length * 0.2} Q 1,${-length * 0.55} 0,${-length * 0.82}`);
+        lines.push(`M ${-3},${-length * 0.25} Q ${-1},${-length * 0.5} ${-2},${-length * 0.72}`);
+        lines.push(`M ${3},${-length * 0.25} Q ${1},${-length * 0.5} ${2},${-length * 0.72}`);
+        return lines;
+      }
+
+      function speckleDots(length) {
+        const dots = [];
+        for (let i = 0; i < 4; i++) {
+          const dx = (Math.random() - 0.5) * 10;
+          const dy = -(length * 0.35 + Math.random() * length * 0.3);
+          dots.push({ x: dx, y: dy, r: 1 + Math.random() * 0.8 });
+        }
+        return dots;
+      }
+
+      const outerLen = 38;
+      const outerW = 16;
+      for (let i = 0; i < 3; i++) {
+        const angle = i * 120 + 30;
+        const g = document.createElementNS(NS, 'g');
+        g.setAttribute('transform', `translate(${cx},${cy}) rotate(${angle})`);
+
+        const p = document.createElementNS(NS, 'path');
+        p.setAttribute('d', petalPath(outerLen, outerW));
+        p.setAttribute('fill', `url(#${outerGradId})`);
+        p.setAttribute('stroke', colours.outerEnd);
+        p.setAttribute('stroke-width', '0.5');
+        p.setAttribute('opacity', '0.92');
+        g.appendChild(p);
+
+        svg.appendChild(g);
+      }
+
+      const innerLen = 30;
+      const innerW = 12;
+      for (let i = 0; i < 3; i++) {
+        const angle = i * 120 + 90;
+        const g = document.createElementNS(NS, 'g');
+        g.setAttribute('transform', `translate(${cx},${cy}) rotate(${angle})`);
+
+        const p = document.createElementNS(NS, 'path');
+        p.setAttribute('d', petalPath(innerLen, innerW));
+        p.setAttribute('fill', `url(#${innerGradId})`);
+        p.setAttribute('stroke', colours.innerEnd);
+        p.setAttribute('stroke-width', '0.4');
+        p.setAttribute('opacity', '0.95');
+        g.appendChild(p);
+
+        streakPaths(innerLen).forEach(d => {
+          const line = document.createElementNS(NS, 'path');
+          line.setAttribute('d', d);
+          line.setAttribute('fill', 'none');
+          line.setAttribute('stroke', colours.streak);
+          line.setAttribute('stroke-width', '0.7');
+          line.setAttribute('opacity', '0.45');
+          line.setAttribute('stroke-linecap', 'round');
+          g.appendChild(line);
+        });
+
+        speckleDots(innerLen).forEach(dot => {
+          const c = document.createElementNS(NS, 'circle');
+          c.setAttribute('cx', dot.x);
+          c.setAttribute('cy', dot.y);
+          c.setAttribute('r', dot.r);
+          c.setAttribute('fill', colours.streak);
+          c.setAttribute('opacity', '0.35');
+          g.appendChild(c);
+        });
+
+        svg.appendChild(g);
+      }
+
+      for (let i = 0; i < 5; i++) {
+        const angle = i * 72 + 10;
+        const rad = angle * Math.PI / 180;
+        const len = 6 + Math.random() * 3;
+        const ex = cx + Math.cos(rad) * len;
+        const ey = cy + Math.sin(rad) * len;
+
+        const line = document.createElementNS(NS, 'line');
+        line.setAttribute('x1', cx);
+        line.setAttribute('y1', cy);
+        line.setAttribute('x2', ex);
+        line.setAttribute('y2', ey);
+        line.setAttribute('stroke', '#8bc34a');
+        line.setAttribute('stroke-width', '1');
+        line.setAttribute('stroke-linecap', 'round');
+        line.setAttribute('opacity', '0.8');
+        svg.appendChild(line);
+
+        const bulb = document.createElementNS(NS, 'circle');
+        bulb.setAttribute('cx', ex);
+        bulb.setAttribute('cy', ey);
+        bulb.setAttribute('r', 1.8);
+        bulb.setAttribute('fill', colours.pistil);
+        bulb.setAttribute('opacity', '0.9');
+        svg.appendChild(bulb);
+      }
+
+      const center = document.createElementNS(NS, 'circle');
+      center.setAttribute('cx', cx);
+      center.setAttribute('cy', cy);
+      center.setAttribute('r', 3);
+      center.setAttribute('fill', '#8bc34a');
+      center.setAttribute('opacity', '0.6');
+      svg.appendChild(center);
+
+      return svg;
+    }
+
+    const flowerTilts = [-8, 5, -3, 10, -6];
+
+    function buildFlower(index) {
+      const wrapper = document.createElement('div');
+      wrapper.classList.add('flower-wrapper');
+
+      const stem = document.createElement('div');
+      stem.classList.add('stem');
+
+      const leafLeft = document.createElement('div');
+      leafLeft.classList.add('leaf', 'left');
+      const leafRight = document.createElement('div');
+      leafRight.classList.add('leaf', 'right');
+      stem.appendChild(leafLeft);
+      stem.appendChild(leafRight);
+
+      const leafLowerLeft = document.createElement('div');
+      leafLowerLeft.classList.add('leaf-lower', 'left');
+      const leafLowerRight = document.createElement('div');
+      leafLowerRight.classList.add('leaf-lower', 'right');
+      stem.appendChild(leafLowerLeft);
+      stem.appendChild(leafLowerRight);
+
+      const bloomDiv = document.createElement('div');
+      bloomDiv.classList.add('bloom');
+
+      const tilt = flowerTilts[index % flowerTilts.length];
+      bloomDiv.style.setProperty('--bloom-tilt', tilt + 'deg');
+
+      const size = 90 + Math.random() * 15;
+      const svg = createFlowerSVG(
+        flowerColours[index % flowerColours.length],
+        size
+      );
+      bloomDiv.appendChild(svg);
+
+      wrapper.appendChild(bloomDiv);
+      wrapper.appendChild(stem);
+
+      return wrapper;
+    }
+
+    const container = document.getElementById('flowers-container');
+    for (let i = 0; i < 5; i++) {
+      container.appendChild(buildFlower(i));
+    }
+
+    (function generateGrassFlowers() {
+      const grassContainer = document.getElementById('grass-flowers');
+      const count = 10;
+      const colours = ['#fff', '#fce4ec', '#f8bbd0', '#fff9c4', '#e1bee7'];
+
+      for (let i = 0; i < count; i++) {
+        const wrap = document.createElement('div');
+        wrap.classList.add('grass-flower');
+
+        wrap.style.left = (5 + Math.random() * 90) + '%';
+        wrap.style.bottom = (Math.random() * 3) + 'vh';
+        wrap.style.animationDelay = (1.5 + Math.random() * 2.5) + 's';
+
+        const s = 10 + Math.random() * 8;
+        const svg = document.createElementNS(NS, 'svg');
+        svg.setAttribute('width', s);
+        svg.setAttribute('height', s);
+        svg.setAttribute('viewBox', '0 0 20 20');
+
+        const petalColor = colours[Math.floor(Math.random() * colours.length)];
+        const cx = 10, cy = 10;
+
+        for (let p = 0; p < 5; p++) {
+          const angle = p * 72;
+          const el = document.createElementNS(NS, 'ellipse');
+          el.setAttribute('cx', '10');
+          el.setAttribute('cy', '5');
+          el.setAttribute('rx', '2.5');
+          el.setAttribute('ry', '4.5');
+          el.setAttribute('fill', petalColor);
+          el.setAttribute('opacity', '0.85');
+          el.setAttribute('transform', `rotate(${angle} ${cx} ${cy})`);
+          svg.appendChild(el);
+        }
+
+        const dot = document.createElementNS(NS, 'circle');
+        dot.setAttribute('cx', cx);
+        dot.setAttribute('cy', cy);
+        dot.setAttribute('r', '2');
+        dot.setAttribute('fill', '#fdd835');
+        svg.appendChild(dot);
+
+        wrap.appendChild(svg);
+        grassContainer.appendChild(wrap);
+      }
+    })();
+
+    const petalColors = [
+      '#f48fb1', '#f06292', '#ec407a', '#f8bbd0',
+      '#ef9a9a', '#ce93d8', '#e1bee7', '#ff8a80',
+    ];
+
+    function spawnPetal() {
+      const petal = document.createElement('div');
+      petal.classList.add('petal');
+
+      petal.style.left = Math.random() * 100 + 'vw';
+
+      petal.style.background = petalColors[Math.floor(Math.random() * petalColors.length)];
+
+      const scale = 0.7 + Math.random() * 0.8;
+      petal.style.width = (14 * scale) + 'px';
+      petal.style.height = (18 * scale) + 'px';
+
+      const duration = 4 + Math.random() * 4;
+      petal.style.animationDuration = duration + 's';
+
+      petal.style.animationDelay = Math.random() * 1 + 's';
+
+      document.body.appendChild(petal);
+
+      setTimeout(() => petal.remove(), (duration + 1) * 1000);
+    }
+
+    let petalInterval = null;
+
+    function startPetals(rate) {
+      if (petalInterval) clearInterval(petalInterval);
+      petalInterval = setInterval(spawnPetal, rate);
+    }
+
+    setTimeout(() => startPetals(400), 4600);
+
+    const questionSection = document.getElementById('question-section');
+
+    setTimeout(() => {
+      questionSection.classList.add('visible');
+    }, 5500);
+
+    const btnYes = document.getElementById('btn-yes');
+    const btnNo  = document.getElementById('btn-no');
+    const romanticMessage = document.getElementById('romantic-message');
+
+    btnYes.addEventListener('click', () => {
+      romanticMessage.classList.add('visible');
+
+      startPetals(80);
+
+      setTimeout(() => startPetals(300), 5000);
+    });
+
+    function escapeButton() {
+      if (!btnNo.classList.contains('escaping')) {
+        const rect = btnNo.getBoundingClientRect();
+        btnNo.classList.add('escaping');
+        btnNo.style.left = rect.left + 'px';
+        btnNo.style.top  = rect.top + 'px';
+      }
+
+      const btnW = btnNo.offsetWidth;
+      const btnH = btnNo.offsetHeight;
+      const margin = 20;
+
+      const maxX = window.innerWidth  - btnW - margin;
+      const maxY = window.innerHeight - btnH - margin;
+
+      const newX = margin + Math.random() * (maxX - margin);
+      const newY = margin + Math.random() * (maxY - margin);
+
+      btnNo.style.left = newX + 'px';
+      btnNo.style.top  = newY + 'px';
+    }
+
+    btnNo.addEventListener('mouseenter', escapeButton);
+
+    btnNo.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      escapeButton();
+    });
+  </script>
+</body>
+</html>
